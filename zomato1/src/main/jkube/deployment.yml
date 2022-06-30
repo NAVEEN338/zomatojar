@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    jkube.io/scm-url: https://naveen338/naveeen/zomato1
+    jkube.io/issue-system: Redmine
+    jkube.io/issue-tracker-url: https://redmine.fic.udc.es/project/zomato1/issues
+    jkube.io/scm-tag: head
+  labels:
+    app: zomato1
+    provider: jkube
+    version: 1.0-SNAPSHOT
+    group: zomato
+  name: zomato1
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: zomato1
+      provider: jkube
+      group: zomato
+  template:
+    metadata:
+      annotations:
+        jkube.io/scm-url: https://naveen338/naveeen/zomato1
+        jkube.io/issue-system: Redmine
+        jkube.io/issue-tracker-url: https://redmine.fic.udc.es/project/zomato1/issues
+        jkube.io/scm-tag: head
+      labels:
+        app: zomato1
+        provider: jkube
+        version: 1.0-SNAPSHOT
+        group: zomato
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: naveen338:5050/naveeen/zomato1:latest
+        imagePullPolicy: Always
+        name: deploy-zomato1
+        securityContext:
+          privileged: false
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+        - name: nav
